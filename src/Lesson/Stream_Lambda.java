@@ -2,6 +2,7 @@ package Lesson;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Stream_Lambda {
     public static void sortingVal(){
@@ -149,7 +150,58 @@ public class Stream_Lambda {
         collect.forEach((key, value) -> System.out.println(key + ": " + value));
     }
 
+    /** Highest Paid Employee in Each Department */
+    public static void highestPaidEmploye(){
+        List<Employee> employees = List.of(
+                new Employee(1, "Alice", "IT", "Female", 25, 60000),
+                new Employee(2, "Bob", "HR", "Male", 30, 50000),
+                new Employee(3, "Charlie", "Finance", "Male", 35, 70000),
+                new Employee(4, "Diana", "IT", "Female", 28, 65000),
+                new Employee(5, "Ethan", "Sales", "Male", 40, 55000),
+                new Employee(6, "Fiona", "Marketing", "Female", 32, 62000),
+                new Employee(7, "George", "IT", "Male", 29, 68000),
+                new Employee(8, "Hannah", "Finance", "Female", 31, 72000),
+                new Employee(9, "Ian", "HR", "Male", 27, 52000),
+                new Employee(10, "Julia", "Sales", "Female", 26, 58000)
+        );
+        Map<String, Optional<Employee>> collect = employees.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                Employee::getDepartment,
+                                Collectors.maxBy(Comparator.comparingInt(Employee::getSalary))
 
+                        )
+                );
+        collect.forEach((dept,emp) -> {
+            Employee employee = emp.get();
+            System.out.println(dept + ": " + employee.getName());
+        });
+    }
+
+    /** Group Employees by First Letter */
+    public static void groupByFirstLetter(){
+        /** Expected Output
+         * A -> [Alice,Adam]
+         * B -> [Bob,Brian]
+         * J -> [John,James]
+         * */
+        List<String> name = List.of(
+                "John",
+                "James",
+                "Alice",
+                "Adam",
+                "Bob",
+                "Brian"
+        );
+        Map<Character, List<String>> collect = name.stream().collect(
+                Collectors.groupingBy(
+                        x -> x.charAt(0)
+                )
+        );
+
+        collect.forEach((key, value) -> System.out.println(key + ": " + value));
+//        System.out.println(collect);
+    }
 
     public static void main(String[] args) {
         List<Person> people = Arrays.asList(
@@ -195,6 +247,10 @@ public class Stream_Lambda {
         findByDepartment();
         System.out.println("=============Find By Salary Department=============");
         sumSalaryDepartment();
+        System.out.println("=============Highest Salary By Department=============");
+        highestPaidEmploye();
+        System.out.println("=============Group by first Letter =============");
+        groupByFirstLetter();
 
     }
 }
